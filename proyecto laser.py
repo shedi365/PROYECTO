@@ -84,3 +84,49 @@ while ejecutando:
                     clase_nombre = ["Primera", "Segunda", "Tercera"][int(clase)-1]
                     break
                 print("Error: Opción no válida.")
+ # Tipo de boleto
+            while True:
+                tipo = input("Tipo (N. Nacional, I. Internacional): ").upper()
+                if tipo in ("N", "I"):
+                    tipo_nombre = "Nacional" if tipo == "N" else "Internacional"
+                    break
+                print("Error: Ingrese N o I.")
+            
+            # Ruta y precio
+            precio_base = 0
+            while True:
+                if tipo_nombre == "Nacional":
+                    print("Rutas nacionales disponibles:")
+                    for ruta in rutas_nacionales:
+                        print(f"- {ruta}")
+                    ruta = input("Ruta: ").strip()
+                    if ruta in rutas_nacionales:
+                        precio_base = rutas_nacionales[ruta]
+                        break
+                else:
+                    print("Rutas internacionales disponibles:")
+                    for ruta in rutas_internacionales:
+                        print(f"- {ruta}")
+                    ruta = input("Ruta: ").strip()
+                    if ruta in rutas_internacionales:
+                        precio_base = rutas_internacionales[ruta] * 2
+                        break
+                print("Error: Ruta no válida.")
+            
+            # Descuentos
+            if edad < 12 or edad >= 60:
+                precio = precio_base * 0.9
+            else:
+                precio = precio_base
+            
+            # Servicios adicionales
+            servicios = input("¿Servicios adicionales? (S/N): ").upper()
+            if servicios == "S":
+                precio += 20
+                reporte["servicios_adicionales"] += 1
+            
+            # Actualizar reporte
+            reporte["total_boletos"] += 1
+            reporte["ingresos_clase"][clase_nombre] += precio
+            reporte["ingresos_tipo"][tipo_nombre] += precio
+            reporte["ingresos_ruta"][ruta] = reporte["ingresos_ruta"].get(ruta, 0) + precio

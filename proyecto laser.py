@@ -38,3 +38,49 @@ while ejecutando:
     if opcion == "1":
         print("\n" * 50)
         print("\n--- COMPRAR BOLETO ---\n")
+
+# Validar número de boletos
+        while True:
+            try:
+                num_boletos = int(input("Número de boletos a comprar: "))
+                if num_boletos > 0:
+                    break
+                print("Error: Debe ser al menos 1 boleto.")
+            except:
+                print("Error: Ingrese un número válido.")
+        
+        total_pagar = 0
+        
+        for _ in range(num_boletos):
+            print(f"\nBoleto #{_ + 1}")
+            
+            # Nombre
+            nombre = input("Nombre del pasajero: ").strip()
+            
+            # Cédula
+            while True:
+                cedula = input("Cédula (V/E): ").upper()
+                if cedula in ("V", "E"):
+                    break
+                print("Error: Ingrese V o E.")
+            
+            # Edad
+            while True:
+                try:
+                    edad = int(input("Edad del pasajero: "))
+                    if edad >= 18:
+                        break
+                    print("Error: El pasajero debe ser mayor de 18 años.")
+                except:
+                    print("Error: Ingrese un número válido.")
+            
+            # Clase
+            while True:
+                clase = input("Clase (1. Primera, 2. Segunda, 3. Tercera): ").strip()
+                if clase in ("1", "2", "3"):
+                    if clase == "3" and edad >= 60:
+                        print("Error: Tercera clase no disponible para mayores de 60 años.")
+                        continue
+                    clase_nombre = ["Primera", "Segunda", "Tercera"][int(clase)-1]
+                    break
+                print("Error: Opción no válida.")

@@ -130,3 +130,43 @@ while ejecutando:
             reporte["ingresos_clase"][clase_nombre] += precio
             reporte["ingresos_tipo"][tipo_nombre] += precio
             reporte["ingresos_ruta"][ruta] = reporte["ingresos_ruta"].get(ruta, 0) + precio
+
+total_pagar += precio
+        
+        # Proceso de pago
+        print(f"\nTotal a pagar: ${total_pagar:.2f}")
+        while True:
+            try:
+                monto = float(input("Monto recibido: $"))
+                if monto >= total_pagar:
+                    print(f"Vuelto: ${monto - total_pagar:.2f}")
+                    break
+                print("Error: Monto insuficiente.")
+            except:
+                print("Error: Ingrese un número válido.")
+        
+        input("\nPresione Enter para continuar...")
+
+    elif opcion == "2":
+        print("\n" * 50)
+        print("\n--- REPORTE DEL SISTEMA ---\n")
+        print(f"Total boletos vendidos: {reporte['total_boletos']}")
+        print("\nIngresos por clase:")
+        for clase, monto in reporte['ingresos_clase'].items():
+            print(f"- {clase}: ${monto:.2f}")
+        print("\nIngresos por tipo:")
+        for tipo, monto in reporte['ingresos_tipo'].items():
+            print(f"- {tipo}: ${monto:.2f}")
+        print("\nIngresos por ruta:")
+        for ruta, monto in reporte['ingresos_ruta'].items():
+            print(f"- {ruta}: ${monto:.2f}")
+        print(f"\nServicios adicionales solicitados: {reporte['servicios_adicionales']}")
+        input("\nPresione Enter para volver al menú...")
+
+    elif opcion == "3":
+        ejecutando = False
+        print("\n¡Gracias por usar LASER Airlines!")
+    
+    else:
+        print("Opción no válida. Intente nuevamente.")
+        input("Presione Enter para continuar...")

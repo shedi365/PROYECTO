@@ -129,10 +129,10 @@ while ejecutando:
             reporte["total_boletos"] += 1
             reporte["ingresos_clase"][clase_nombre] += precio
             reporte["ingresos_tipo"][tipo_nombre] += precio
-            reporte["ingresos_ruta"][ruta] = reporte["ingresos_ruta"].get(ruta, 0) + precio
+            reporte["ingresos_ruta"][ruta] = reporte["ingresos_ruta"].get(ruta, 0) + precio 
+            
+        total_pagar += precio
 
-total_pagar += precio
-        
         # Proceso de pago
         print(f"\nTotal a pagar: ${total_pagar:.2f}")
         while True:

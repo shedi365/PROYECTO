@@ -1,0 +1,158 @@
+
+Inicio
+    // Configuración inicial
+    Definir rutas_nacionales como un diccionario con rutas y precios
+    Definir rutas_internacionales como un diccionario con rutas y precios
+    Definir reporte como un diccionario con:
+        - total_boletos: 0
+        - ingresos_clase: {"Primera": 0, "Segunda": 0, "Tercera": 0}
+        - ingresos_tipo: {"Nacional": 0, "Internacional": 0}
+        - ingresos_ruta: {}
+        - servicios_adicionales: 0
+
+    // Bucle principal
+    ejecutando = Verdadero
+    Mientras ejecutando sea Verdadero:
+        Limpiar pantalla
+        Mostrar menú:
+            "=== LASER Airlines ==="
+            "1. Comprar boleto"
+            "2. Ver reporte del sistema"
+            "3. Salir"
+        opcion = Leer entrada del usuario
+
+        Si opcion es "1":
+            Limpiar pantalla
+            Mostrar "--- COMPRAR BOLETO ---"
+
+            // Validar número de boletos
+            Repetir:
+                num_boletos = Leer número de boletos
+                Si num_boletos > 0:
+                    Romper
+                Mostrar "Error: Debe ser al menos 1 boleto."
+            Hasta que num_boletos sea válido
+
+            total_pagar = 0
+
+            Para cada boleto desde 1 hasta num_boletos:
+                Mostrar "Boleto #" + número de boleto
+
+                // Nombre
+                nombre = Leer nombre del pasajero
+
+                // Cédula
+                Repetir:
+                    cedula = Leer cédula (V/E)
+                    Si cedula es "V" o "E":
+                        Romper
+                    Mostrar "Error: Ingrese V o E."
+                Hasta que cedula sea válida
+
+                // Edad
+                Repetir:
+                    edad = Leer edad del pasajero
+                    Si edad >= 18:
+                        Romper
+                    Mostrar "Error: El pasajero debe ser mayor de 18 años."
+                Hasta que edad sea válida
+
+                // Clase
+                Repetir:
+                    clase = Leer clase (1. Primera, 2. Segunda, 3. Tercera)
+                    Si clase es "1", "2" o "3":
+                        Si clase es "3" y edad >= 60:
+                            Mostrar "Error: Tercera clase no disponible para mayores de 60 años."
+                            Continuar
+                        clase_nombre = ["Primera", "Segunda", "Tercera"][clase - 1]
+                        Romper
+                    Mostrar "Error: Opción no válida."
+                Hasta que clase sea válida
+
+                // Tipo de boleto
+                Repetir:
+                    tipo = Leer tipo (N. Nacional, I. Internacional)
+                    Si tipo es "N" o "I":
+                        tipo_nombre = "Nacional" si tipo es "N" sino "Internacional"
+                        Romper
+                    Mostrar "Error: Ingrese N o I."
+                Hasta que tipo sea válido
+
+                // Ruta y precio
+                precio_base = 0
+                Repetir:
+                    Si tipo_nombre es "Nacional":
+                        Mostrar "Rutas nacionales disponibles:"
+                        Para cada ruta en rutas_nacionales:
+                            Mostrar ruta
+                        ruta = Leer ruta
+                        Si ruta está en rutas_nacionales:
+                            precio_base = rutas_nacionales[ruta]
+                            Romper
+                    Sino:
+                        Mostrar "Rutas internacionales disponibles:"
+                        Para cada ruta en rutas_internacionales:
+                            Mostrar ruta
+                        ruta = Leer ruta
+                        Si ruta está en rutas_internacionales:
+                            precio_base = rutas_internacionales[ruta] * 2
+                            Romper
+                    Mostrar "Error: Ruta no válida."
+                Hasta que ruta sea válida
+
+                // Descuentos
+                Si edad < 12 o edad >= 60:
+                    precio = precio_base * 0.9
+                Sino:
+                    precio = precio_base
+
+                // Servicios adicionales
+                servicios = Leer "¿Servicios adicionales? (S/N)"
+                Si servicios es "S":
+                    precio += 20
+                    reporte["servicios_adicionales"] += 1
+
+                // Actualizar reporte
+                reporte["total_boletos"] += 1
+                reporte["ingresos_clase"][clase_nombre] += precio
+                reporte["ingresos_tipo"][tipo_nombre] += precio
+                reporte["ingresos_ruta"][ruta] = reporte["ingresos_ruta"].get(ruta, 0) + precio
+
+                total_pagar += precio
+
+            // Proceso de pago
+            Mostrar "Total a pagar: $" + total_pagar
+            Repetir:
+                monto = Leer monto recibido
+                Si monto >= total_pagar:
+                    Mostrar "Vuelto: $" + (monto - total_pagar)
+                    Romper
+                Mostrar "Error: Monto insuficiente."
+            Hasta que monto sea válido
+
+            Esperar entrada del usuario para continuar
+
+        Sino, si opcion es "2":
+            Limpiar pantalla
+            Mostrar "--- REPORTE DEL SISTEMA ---"
+            Mostrar "Total boletos vendidos: " + reporte["total_boletos"]
+            Mostrar "Ingresos por clase:"
+            Para cada clase en reporte["ingresos_clase"]:
+                Mostrar clase + ": $" + reporte["ingresos_clase"][clase]
+            Mostrar "Ingresos por tipo:"
+            Para cada tipo en reporte["ingresos_tipo"]:
+                Mostrar tipo + ": $" + reporte["ingresos_tipo"][tipo]
+            Mostrar "Ingresos por ruta:"
+            Para cada ruta en reporte["ingresos_ruta"]:
+                Mostrar ruta + ": $" + reporte["ingresos_ruta"][ruta]
+            Mostrar "Servicios adicionales solicitados: " + reporte["servicios_adicionales"]
+            Esperar entrada del usuario para volver al menú
+
+        Sino, si opcion es "3":
+            ejecutando = Falso
+            Mostrar "¡Gracias por usar LASER Airlines!"
+
+        Sino:
+            Mostrar "Opción no válida. Intente nuevamente."
+            Esperar entrada del usuario para continuar
+Fin
